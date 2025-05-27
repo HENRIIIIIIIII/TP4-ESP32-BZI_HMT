@@ -27,7 +27,7 @@ while True:  # Boucle infinie
 
 ```
   
-Ce dernier sert à alimenter la PIN n°2 de notre ESP32, en branchant une LED de allons de la PIN n°2 au GND la PIN nommé G sur la carte, la LED clignote. Ce qui veut dire que notre code a été flashé correctement sur l'appareil.
+Ce dernier sert à alimenter la PIN n°2 de notre ESP32, en branchant une LED allons de la PIN n°2 au GND la PIN nommé G sur la carte, la LED clignote. Ce qui veut dire que notre code a été flashé correctement sur l'appareil.
 #### Changement de la couleur d'une LED RGB en appuyant sur le boutton boot
 
 
