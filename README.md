@@ -1,5 +1,4 @@
 # TP4-ESP32-BZI_HMT
-TP4 – ESP32 - Découverte
 ## ESP32 Partie python
 ### Mise à jour des firmeward et installation d'un interperteur phyton
 Pour programmer en phyton nous devons utiliser IDE Thonny (comme conseillé dans la donnée), avant même de commencer a tapé du code il faut.
