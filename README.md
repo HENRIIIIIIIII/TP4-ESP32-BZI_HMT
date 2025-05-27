@@ -14,17 +14,21 @@ Installer un interperteur phyton sur l'ESP32-S3, voici la marche à suivre :
 
 Tout ces étape nous ont permis de pouvoir flashé notre programme (l'envoyer à notre ESP) une fois celuit-ci écrit. Nous pouvons enfin crée un fichier main.py et commencer à coder.
 ### Explication et stratégie du code en phyton
+#### mise en route et verification d'un programme flashé
 Pour commencé nous avons verifier le fonctionement de l'appareil grace à un code exemple sur le site : https://randomnerdtutorials.com/getting-started-thonny-micropython-python-ide-esp32-esp8266/
 
 ```
-from machine import Pin
-from time import sleep
-led = Pin(2, Pin.OUT)
-while True:
-  led.value(not led.value())
-  sleep(0.5)
+from machine import Pin # importation des classe Pin broches (GPIO) de la carte
+from time import sleep  # permet d'utiliser la fonction sleep 
+led = Pin(2, Pin.OUT)  # determine les pin d'entrée et de sortie
+while True:  # Boucle infinie
+  led.value(not led.value()) # lis l'état actuel de la LED (0 ou 1) inverse l'état et réecrit la nouvelle valeur
+  sleep(0.5)  #met le programme en pause pendant 0.5 secode pour pouvoir voir la LED à l'oeil nu
 
 ```
   
-Ce dernier sert à alimenter la PIN n°2 de notre ESP32 et en branchant une LED de allons de la PIN n°2 au GND la PIN nommé G, la LED s'allume. Ce qui veut dire que notre code a été flashé correctement sur l'appareil.
+Ce dernier sert à alimenter la PIN n°2 de notre ESP32, en branchant une LED de allons de la PIN n°2 au GND la PIN nommé G sur la carte, la LED clignote. Ce qui veut dire que notre code a été flashé correctement sur l'appareil.
+#### Changement de la couleur d'une LED RGB en appuyant sur le boutton boot
+
+
 
