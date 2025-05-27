@@ -16,12 +16,14 @@ Tout ces étape nous ont permis de pouvoir flashé notre programme (l'envoyer à
 ### Explication et stratégie du code en phyton
 Pour commencé nous avons verifier le fonctionement de l'appareil grace à un code exemple sur le site : https://randomnerdtutorials.com/getting-started-thonny-micropython-python-ide-esp32-esp8266/
 
-`from machine import Pin`
-`from time import sleep`
-`led = Pin(2, Pin.OUT)`
-`while True:`
- ` led.value(not led.value())`
-`  sleep(0.5)`
+```
+from machine import Pin
+from time import sleep
+led = Pin(2, Pin.OUT)
+while True:
+  led.value(not led.value())
+  sleep(0.5)
+```
   
 Ce dernier sert à alimenter la PIN n°2 de notre ESP32 et en branchant une LED de allons de la PIN n°2 au GND la PIN nommé G, la LED s'allume. Ce qui veut dire que notre code a été flashé correctement sur l'appareil.
 
