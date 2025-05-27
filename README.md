@@ -40,7 +40,8 @@ Nous recuperons aussi la réference de la LED ce qui nous permet d'aller à son 
 Nous comprenons donc qu'une trame de 24 bits est communiqué et que chaque couleur et séparer en 8 partie chaque LED (R/G/B) recupére les information lié à ça couleur.
 
 #### Changement de la couleur d'une LED RGB en appuyant sur le boutton boot
-Bibliotech : from import = utiliser certaine fonction specifique et importe charger tout le module
+Bibliotech : 
+
 "from machine import Pin" : importe la classe "Pin" qui nous permet de controler les broche GPIO de l'esp32
 "from neopixel import NeoPixel" : importe la classe "NeoPixel" pour contoler les LED RGB comme celle de type WS2812
 "import time" : Importe le module time pour pouvoir faire des pauses (sleep) dans le programme.
@@ -51,6 +52,7 @@ from neopixel import NeoPixel
 import time
 
 ```
+LED :
 "pin = Pin(48, Pin.OUT)" : Définit la broche GPIO48 en mode sortie pour envoyer des données au NeoPixel
 "neo = NeoPixel(pin, 1)" : Crée un objet NeoPixel branché sur pin avec 1 seule LED.
 "colors = [(255, 0, 0), (0, 255, 0), (0, 0, 255)]" : Liste des couleurs à afficher (rouge, vert, bleu) sous forme de (R, G, B).
