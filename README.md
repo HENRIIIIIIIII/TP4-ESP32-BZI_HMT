@@ -32,6 +32,12 @@ Ce dernier sert à alimenter la PIN n°2 (GPIO 2: broche contrôlable) de notre 
 #### Changement de la couleur d'une LED RGB en appuyant sur le boutton boot
 
 Selon le datasheet la LED RGB communique via GPIO 48 (General Purpose Input/Output, entrée/sortie) : https://dl.espressif.com/dl/SCH_ESP32-S3-DEVKITC-1_V1_20210312C.pdf
+Nous recuperons aussi la réference de la LED ce qui nous permet d'aller à son datasheet et de comprendre son fontionement à la page 8. http://www.normandled.com/upload/202105/SK6812MINI-HS%20LED%20Datasheet.pdf
+
+![image](https://github.com/user-attachments/assets/863adfb6-4316-4e94-a3d6-d4bdee54b486)
+
+
+Nous comprenons donc qu'une trame de 24 bits est communiqué et que chaque couleur et séparer en 8 partie chaque LED recupére les information lié à ça couleur.
 
 
 
