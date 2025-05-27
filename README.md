@@ -23,7 +23,7 @@ from time import sleep  # permet d'utiliser la fonction sleep
 led = Pin(2, Pin.OUT)  # determine les pin d'entrée et de sortie
 while True:  # Boucle infinie
   led.value(not led.value()) # lis l'état actuel de la LED (0 ou 1) inverse l'état et réecrit la nouvelle valeur
-  sleep(0.5)  #met le programme en pause pendant 0.5 secode pour pouvoir voir la LED à l'oeil nu
+  sleep(0.5)  # met le programme en pause pendant 0.5 secode pour pouvoir voir la LED à l'oeil nu
 
 ```
   
