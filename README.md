@@ -28,8 +28,10 @@ while True:  # Boucle infinie
 
 ```
   
-Ce dernier sert à alimenter la PIN n°2 de notre ESP32, en branchant une LED allons de la PIN n°2 au GND la PIN nommé G sur la carte, la LED clignote. Ce qui veut dire que notre code a été flashé correctement sur l'appareil.
+Ce dernier sert à alimenter la PIN n°2 (GPIO 2: broche contrôlable) de notre ESP32, en branchant une LED allons de la PIN n°2 au GND la PIN nommé G sur la carte, la LED clignote. Ce qui veut dire que notre code a été flashé correctement sur l'appareil.
 #### Changement de la couleur d'une LED RGB en appuyant sur le boutton boot
+
+Selon le datasheet la LED RGB communique via GPIO 48 (General Purpose Input/Output, entrée/sortie) : https://dl.espressif.com/dl/SCH_ESP32-S3-DEVKITC-1_V1_20210312C.pdf
 
 
 
