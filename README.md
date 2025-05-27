@@ -23,6 +23,7 @@ led = Pin(2, Pin.OUT)
 while True:
   led.value(not led.value())
   sleep(0.5)
+
 ```
   
 Ce dernier sert à alimenter la PIN n°2 de notre ESP32 et en branchant une LED de allons de la PIN n°2 au GND la PIN nommé G, la LED s'allume. Ce qui veut dire que notre code a été flashé correctement sur l'appareil.
