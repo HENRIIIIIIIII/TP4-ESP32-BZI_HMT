@@ -42,8 +42,8 @@ Nous comprenons donc qu'une trame de 24 bits est communiqué et que chaque coule
 #### Changement de la couleur d'une LED RGB en appuyant sur le boutton boot
 Bibliotech : 
 
-"from machine import Pin" : importe la classe "Pin" qui nous permet de controler les broche GPIO de l'esp32
-"from neopixel import NeoPixel" : importe la classe "NeoPixel" pour contoler les LED RGB comme celle de type WS2812
+"from machine import Pin" : importe la classe "Pin" qui nous permet de controler les broche GPIO de l'esp32.
+"from neopixel import NeoPixel" : importe la classe "NeoPixel" pour contoler les LED RGB comme celle de type WS2812.
 "import time" : Importe le module time pour pouvoir faire des pauses (sleep) dans le programme.
 
 ```
