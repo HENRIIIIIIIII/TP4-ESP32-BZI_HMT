@@ -96,7 +96,98 @@ Anti rebond :
 "time.sleep(0.2)" : Petite pause pour éviter que l'appui soit détecté plusieurs fois (anti-rebond).
 
 #### Changement de la couleur d'une LED RGB en appuyant sur le boutton boot Arduino
+Nous avons choisi de séparer la partie du code qui permet de changer la couleur de son propre ESP
+et l'autre code permetant de changer la couleur de l'autre ESP (voir plus bas)
 
+librairie de base pour arduino 
+librairie pour le fonctionemment de la LED RGB
+```
+#include <Arduino.h>
+#include <Adafruit_NeoPixel.h>  //lib for LED_RGB fonction
+```
+Préparation du contrôle d’une LED NeoPixel sur GPIO48
+définissent le bouton boot sur GPIO0
+et initialisent la couleur à éteinte ainsi qu’un compteur pour changer la couleur
+```
+Adafruit_NeoPixel LED_RGB(1,48,NEO_GRBW + NEO_KHZ800);
+const int BOOT_BUTTON = 0;  // GPIO0 is the boot button
+ 
+uint8_t rgbColor[] = {0, 0, 0};  // Start with all colors off
+uint8_t counter = 0;  // Conteur
+```
+fonctionement de la LED RGB 
+initialisation de la luminositer et du bouton BOOT
+```
+void setup()
+{
+  LED_RGB.begin();  // Start function
+  LED_RGB.setBrightness(45);  // To not hurt eyes
+  pinMode(BOOT_BUTTON, INPUT);  // Configure boot button as input
+}
+```
+fonction main 
+Lecture du bouton boot
+interation pour changement de couleur avec reset pour revenir à la couleur de base
+
+```
+void loop()
+{
+  // Read the boot button state
+  int buttonState = digitalRead(BOOT_BUTTON);
+ 
+  // Print button state to serial monitor
+  Serial.println(buttonState);
+ 
+  // Change LED color based on button state
+  if (buttonState == LOW)
+  {  // Button is pressed (active LOW)
+    if(counter < 4)
+    {
+      counter++;  // Increment counter and wrap around at 4
+    }
+    else
+    {
+      counter = 0;  // Reset counter
+    }
+   
+  }
+```
+selection de la couleur en fonction de l'incrementation fait précedement
+``` 
+  // Toggle RGB based on counter
+  switch (counter)
+  {
+    // Red
+    case 0:
+      rgbColor[0] = 255;
+      rgbColor[1] = 0;
+      rgbColor[2] = 0;
+      break;
+   
+    // Green
+    case 1:
+      rgbColor[0] = 0;
+      rgbColor[1] = 255;
+      rgbColor[2] = 0;
+      break;
+   
+    // Blue
+    case 2:
+      rgbColor[0] = 0;
+      rgbColor[1] = 0;
+      rgbColor[2] = 255;
+      break;
+  }
+```
+Application des variables pour afficher la couleur
+avec un délais pour la lecture rapide
+```
+  // Set the LED color
+  LED_RGB.setPixelColor(0, uint32_t(LED_RGB.Color(rgbColor[0], rgbColor[1], rgbColor[2])));
+  LED_RGB.show();
+   
+  delay(100);  // Small delay to prevent too rapid reading
+```
 ## Comunication entre deux ESP
 Pour cette partie, nous allons faire en sorte lorsque les deux ESP (phyton et en C) communique entre eux une fois cela fait le boutton boot devrais changer la couleur de la LED de l'autre appareil.
 Si il ne communique pas alors le boot change la couleur de son propre ESP.
@@ -194,4 +285,21 @@ except OSError:
 time.sleep(0.01)
 ```
 ### Communication en wifi TCP Client Arduino
-
+L'ESP codé en Arduino sera le client c'est donc lui qui va provoquer le changement de couleur
+sur l'autre ESP server en appuyant sur le boutton boot
+cette librairie nous permet de paramétrer la connection au wifi
+`#include <WiFi.h>`
+Initialisation des coordonée pour la connexion au ESP server
+SSID nom du wifi
+password mot de passse du wifi
+host adresse IP de l'ESP32
+```
+const char* ssid = "ESP_serveur";
+const char* password = "12345678";
+ 
+const char* host = "192.168.4.1";  // IP du serveur AP ESP32 Python
+const uint16_t port = 1234;
+ 
+const int buttonPin = 0;
+bool lastButtonState = HIGH;
+```
