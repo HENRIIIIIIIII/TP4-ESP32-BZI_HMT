@@ -110,90 +110,85 @@ Nous avons choisit d'utiliser l'ESP phyton en tant que TCP server car la bibliot
 Et l'ESP en C servira de TCP client.
 
 Voici les explication des differents fonction pour cette partie :
-Les bibliotechs :
+
 network permet de connecter l’ESP32 au Wi-Fi
 socket sert à envoyer/recevoir des données sur ce réseau.
 ```
 import socket
 import network
 ```
-Ces lignes initialisent les variables pour indiquer que le Wi-Fi n’est pas encore connecté (wifi_connected = False)
-et que le serveur TCP n’est pas encore créé (server_socket = None).
+Configuration du point d'accès wifi :
+ap est un objet qui représente le point d’accès WiFi 
+ap.config(essid='ESP_serveur', password='12345678', authmode=3) ESP_serveur nom du wifi
+12345678 mot de passe
+auhmode 3 type de sécurité WPA2 type de sécurité
 ```
-# === Réseau Setup ===
-wifi_connected = False
-server_socket = None
-```
-Cette fonction connect_wifi() active et connecte l’ESP32 au réseau Wi-Fi avec le SSID et mot de passe donnés,
-attend jusqu’à 10 secondes pour la connexion, puis retourne l’objet WLAN si connecté,
-sinon affiche un message d’échec.
-attnetion à bien attendre les dix secondes avant d'essayer de changer la couleur sur le même ESP
-```
-def connect_wifi():
-    global wifi_connected
-    ssid = 'ESP_serveur'
-    password = '1234'
+# --- WiFi point d'accès ---
+ap = network.WLAN(network.AP_IF)
+ap.active(True)
+ap.config(essid='ESP_serveur', password='12345678', authmode=3)  # AP sécurisé
 
-    wlan = network.WLAN(network.STA_IF)
-    wlan.active(True)
-    wlan.connect(ssid, password)
-
-    timeout = 10  # 10 secondes max
-    for _ in range(timeout * 10):
-        if wlan.isconnected():
-            wifi_connected = True
-            print('WiFi connecté, IP :', wlan.ifconfig()[0])
-            return wlan
-        time.sleep(0.1)
-
-    print("Connexion WiFi échouée")
-    return None
+print("AP démarré avec IP :", ap.ifconfig()[0])
 ```
-La fonction setup_tcp_server() crée un serveur TCP sur le port 1234
-prêt à accepter des connexions entrantes, et le configure en mode non bloquant 
-en cas d’erreur, elle l’affiche.
+Création d'un serveur TCP sur l’ESP32 qui écoute sur le port 1234, accepte jusqu’à 1 connexion en attente, et ne bloque pas l’exécution quand il n’y a pas de client connecté.
+Cela permet de gérer les connexions entrantes sans interrompre le reste du programme
 ```
-def setup_tcp_server():
-    global server_socket
-    try:
-        addr = socket.getaddrinfo('0.0.0.0', 1234)[0][-1]
-        server_socket = socket.socket()
-        server_socket.bind(addr)
-        server_socket.listen(1)
-        server_socket.setblocking(False)
-        print("Serveur TCP démarré sur port 1234")
-    except Exception as e:
-        print("Erreur démarrage serveur TCP :", e)
+# --- TCP server setup ---
+addr = socket.getaddrinfo('0.0.0.0', 1234)[0][-1]
+server_socket = socket.socket()
+server_socket.bind(addr)
+server_socket.listen(1)
+server_socket.setblocking(False)
+print("Serveur TCP lancé sur port 1234")
 ```
-Ce bloc appelle la fonction de connexion Wi-Fi, puis s’il y a bien connexion (wifi_connected == True)
-il démarre le serveur TCP 
-```
-# === Initialisation WiFi + TCP ===
-wlan = connect_wifi()
-if wifi_connected:
-    setup_tcp_server()
-```
-Ce bloc vérifie s’il y a une connexion Wi-Fi et un serveur actif ; si un client TCP se connecte et envoie "toggle"
-la couleur de la LED change, sinon il attend tranquillement sans planter.
+Applique une couleur initiale sur la LED NeoPixel et définit une fonction qui fait tourner la couleur parmi une liste chaque fois qu’elle est appelée.
+Simple et efficace pour gérer un cycle de couleurs.
 
 ```
-          # 2. Gérer message TCP (si WiFi actif)
-    if wifi_connected and server_socket:
-        try:
-            cl, addr = server_socket.accept()
-            print("Client TCP :", addr)
-            cl.settimeout(3.0)
-            data = cl.recv(1024)
-            print("TCP reçu :", data)
-            if data == b"toggle":
-                color_index = (color_index + 1) % len(colors)
-                neo[0] = colors[color_index]
-                neo.write()
-                print("TCP → Couleur :", colors[color_index])
-            cl.close()
-        except OSError:
-            pass  # aucun client = normal
+# --- Applique couleur initiale ---
+neo[0] = colors[color_index]
+neo.write()
 
-    time.sleep(0.01)
+def change_color():
+    global color_index
+    color_index = (color_index + 1) % len(colors)
+    neo[0] = colors[color_index]
+    neo.write()
+    print("Couleur changée:", colors[color_index])
 ```
+Détecte un appui sur le bouton et ne change la couleur qu’une fois par appui, même si tu maintiens le bouton enfoncé.
+Il attend que tu relâches le bouton avant d’accepter un nouvel appui, et ajoute un petit délai pour éviter les faux déclenchements liés au bruit mécanique du bouton.
 
+```
+while True:
+    # Bouton local
+    if button.value() == 0:
+        change_color()
+        while button.value() == 0:
+            time.sleep(0.01)
+        time.sleep(0.2)
+```
+Ce code vérifie si un client se connecte au serveur.
+S’il reçoit le message "CHANGE", il change la couleur de la LED.
+Ensuite, il ferme la connexion.
+S’il n’y a pas de client, il continue sans bloquer.
+
+```
+# Accepter connexion client
+try:
+    cl, addr = server_socket.accept()
+    print("Client connecté:", addr)
+    cl.settimeout(2)
+    data = cl.recv(1024)
+    if data:
+        msg = data.decode('utf-8').strip()
+        print("Message reçu:", msg)
+        if msg == "CHANGE":
+            change_color()
+    cl.close()
+except OSError:
+    pass
+
+time.sleep(0.01)
+```
+###Communication en wifi TCP Client arduino
