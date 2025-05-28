@@ -117,7 +117,12 @@ socket sert à envoyer/recevoir des données sur ce réseau.
 import socket
 import network
 ```
-
-
+Ces lignes initialisent les variables pour indiquer que le Wi-Fi n’est pas encore connecté (wifi_connected = False)
+et que le serveur TCP n’est pas encore créé (server_socket = None).
+```
+# === Réseau Setup ===
+wifi_connected = False
+server_socket = None
+```
 
 
