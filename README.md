@@ -105,7 +105,7 @@ notre appareil dispose de plusieur moyen de communication, tout depend de la dis
 ![Capture d’écran 2025-05-28 141305](https://github.com/user-attachments/assets/ed1bbcf5-beb5-43a7-a47d-bde39f2a79bb)
 ### Communication en wifi partie phyton
 Nous allons donc utiliser la communication en wifi comme dans le tutoriel.
-Vue que nous allons connecter les deux ESP en mode LAN donc un des deux va servir de routeur, nous n'avons pas besoin de se connecter à internet.
+Vue que nous allons connecter les deux ESP en mode LAN donc un des deux va servir de routeur (TCP client/TCP server), nous n'avons pas besoin de se connecter à internet.
 
 
 
