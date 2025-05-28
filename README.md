@@ -54,7 +54,7 @@ import time
 LED :
 "pin = Pin(48, Pin.OUT)" : Définit la broche GPIO48 en mode sortie pour envoyer des données au NeoPixel
 "neo = NeoPixel(pin, 1)" : Crée un objet NeoPixel branché sur pin avec 1 seule LED.
-"colors = [(255, 0, 0), (0, 255, 0), (0, 0, 255)]" : Liste des couleurs à afficher (rouge, vert, bleu) sous forme de (R, G, B).
+"colors = [(10, 0, 0), (0, 10, 0), (0, 0, 10)]" : Liste des couleurs à afficher (rouge, vert, bleu) sous forme de (R, G, B).
 "color_index = 0" : Variable pour garder en mémoire quelle couleur est affichée actuellement.
 
 ```
@@ -191,4 +191,5 @@ except OSError:
 
 time.sleep(0.01)
 ```
-### Communication en wifi TCP Client arduino
+### Communication en wifi TCP Client Arduino
+
