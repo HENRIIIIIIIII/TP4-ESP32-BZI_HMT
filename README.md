@@ -127,6 +127,7 @@ server_socket = None
 Cette fonction connect_wifi() active et connecte l’ESP32 au réseau Wi-Fi avec le SSID et mot de passe donnés,
 attend jusqu’à 10 secondes pour la connexion, puis retourne l’objet WLAN si connecté,
 sinon affiche un message d’échec.
+attnetion à bien attendre les dix secondes avant d'essayer de changer la couleur sur le même ESP
 ```
 def connect_wifi():
     global wifi_connected
@@ -164,3 +165,35 @@ def setup_tcp_server():
     except Exception as e:
         print("Erreur démarrage serveur TCP :", e)
 ```
+Ce bloc appelle la fonction de connexion Wi-Fi, puis s’il y a bien connexion (wifi_connected == True)
+il démarre le serveur TCP 
+```
+# === Initialisation WiFi + TCP ===
+wlan = connect_wifi()
+if wifi_connected:
+    setup_tcp_server()
+```
+Ce bloc vérifie s’il y a une connexion Wi-Fi et un serveur actif ; si un client TCP se connecte et envoie "toggle"
+la couleur de la LED change, sinon il attend tranquillement sans planter.
+
+```
+          # 2. Gérer message TCP (si WiFi actif)
+    if wifi_connected and server_socket:
+        try:
+            cl, addr = server_socket.accept()
+            print("Client TCP :", addr)
+            cl.settimeout(3.0)
+            data = cl.recv(1024)
+            print("TCP reçu :", data)
+            if data == b"toggle":
+                color_index = (color_index + 1) % len(colors)
+                neo[0] = colors[color_index]
+                neo.write()
+                print("TCP → Couleur :", colors[color_index])
+            cl.close()
+        except OSError:
+            pass  # aucun client = normal
+
+    time.sleep(0.01)
+```
+
