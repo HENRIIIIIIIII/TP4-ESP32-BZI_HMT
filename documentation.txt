@@ -1,0 +1,51 @@
+il faut débracher d'abord ! puis appuyer sur boot maintenir et connecter (mise à jour du firmeward et insallation d'un interperte phyton) "capture d'écrant" (code en pyhton = interepretteur // code en C pas d'interpreteur)
+on trouve un code exemple sur le site https://randomnerdtutorials.com/getting-started-thonny-micropython-python-ide-esp32-esp8266/
+qui nous permet de ce mettre en marche
+
+une verification en branchant une led à la pin 2 (gnd / pin2) a été faite
+dans le code nous devons utilisé la pin 48
+
+la led RGB communique via le GPIO 48 : https://dl.espressif.com/dl/SCH_ESP32-S3-DEVKITC-1_V1_20210312C.pdf
+
+Ref de la LED SK68XXMINI-HS http://www.normandled.com/upload/202105/SK6812MINI-HS%20LED%20Datasheet.pdf page 8
+une trame de 24 bits séparer en 8 partie par couleurs tout
+
+lien du code : https://github.com/orgs/micropython/discussions/9661
+
+code modifier pour que la couleur change à chaque fois que j'appuye sur boot 
+explication ligne par ligne du code :
+Bibliotech : from import = utiliser certaine fonction specifique et importe charger tout le module
+"from machine import Pin" : importe la classe "Pin" qui nous permet de controler les broche GPIO de l'esp32
+"from neopixel import NeoPixel" : importe la classe "NeoPixel" pour contoler les LED RGB comme celle de type WS2812
+"import time" :  Importe le module time pour pouvoir faire des pauses (sleep) dans le programme.
+
+LED
+"pin = Pin(48, Pin.OUT)" : Définit la broche GPIO48 en mode sortie pour envoyer des données au NeoPixel
+"neo = NeoPixel(pin, 1)" : Crée un objet NeoPixel branché sur pin avec 1 seule LED.
+"colors = [(255, 0, 0), (0, 255, 0), (0, 0, 255)]" : Liste des couleurs à afficher (rouge, vert, bleu) sous forme de (R, G, B).
+"color_index = 0" : Variable pour garder en mémoire quelle couleur est affichée actuellement.
+
+button boot
+"button = Pin(0, Pin.IN, Pin.PULL_UP)" : Définit la broche GPIO0 (le bouton BOOT) en mode entrée avec une résistance pull-up.
+et Le bouton lira 1 quand il n’est pas appuyé et 0 quand il est appuyé.
+"neo[0] = colors[color_index]" : Met la LED à la première couleur de la liste (ici rouge au début).
+"neo.write()" : Envoie les données à la LED pour allumer la bonne couleur.
+
+boucle
+"while True:" Démarre une boucle infinie (le code à l'intérieur tourne en continu)
+"if button.value() == 0:" Vérifie si le bouton est appuyé (valeur 0).
+"color_index = (color_index + 1) % len(colors) Passe à la couleur suivante dans la liste.
+Le % (modulo) permet de revenir au début après la dernière couleur (rouge → vert → bleu → rouge...).
+"neo[0] = colors[color_index]" : Change la couleur affichée sur la LED.
+"neo.write()" : Met à jour la LED avec la nouvelle couleur.
+"print("Couleur actuelle :", colors[color_index])" : Affiche dans la console la couleur actuellement utilisée. pour verification
+
+rebond
+"while button.value() == 0:
+  time.sleep(0.01)" : Attend que le bouton soit relâché avant de continuer (évite les doubles appuis).
+
+"time.sleep(0.2)" : Petite pause pour éviter que l'appui soit détecté plusieurs fois (anti-rebond).
+
+
+
+
