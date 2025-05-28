@@ -38,7 +38,7 @@ Nous recuperons aussi la réference de la LED ce qui nous permet d'aller à son 
 
 Nous comprenons donc qu'une trame de 24 bits est communiqué et que chaque couleur et séparer en 8 partie chaque LED (R/G/B) recupére les information lié à ça couleur.
 
-#### Changement de la couleur d'une LED RGB en appuyant sur le boutton boot
+#### Changement de la couleur d'une LED RGB en appuyant sur le boutton boot phyton
 Bibliotech : 
 
 "from machine import Pin" : importe la classe "Pin" qui nous permet de controler les broche GPIO de l'esp32.
@@ -94,6 +94,8 @@ Anti rebond :
   time.sleep(0.01)" : Attend que le bouton soit relâché avant de continuer (évite les doubles appuis).
   
 "time.sleep(0.2)" : Petite pause pour éviter que l'appui soit détecté plusieurs fois (anti-rebond).
+
+#### Changement de la couleur d'une LED RGB en appuyant sur le boutton boot Arduino
 
 ## Comunication entre deux ESP
 Pour cette partie, nous allons faire en sorte lorsque les deux ESP (phyton et en C) communique entre eux une fois cela fait le boutton boot devrais changer la couleur de la LED de l'autre appareil.
