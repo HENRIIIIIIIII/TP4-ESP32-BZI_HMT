@@ -103,7 +103,7 @@ comme expliquer sur ce lien internet : https://esp32io.com/tutorials/communicati
 notre appareil dispose de plusieur moyen de communication, tout depend de la distance entre nos deux ESP
 
 ![Capture d’écran 2025-05-28 141305](https://github.com/user-attachments/assets/ed1bbcf5-beb5-43a7-a47d-bde39f2a79bb)
-### Communication en wifi 
+### Communication en wifi TCP SERVER phyton
 Nous allons donc utiliser la communication en wifi comme dans le tutoriel.
 Vue que nous allons connecter les deux ESP en mode LAN donc un des deux va servir de routeur (TCP client/TCP server), nous n'avons pas besoin de se connecter à internet.
 Nous avons choisit d'utiliser l'ESP phyton en tant que TCP server car la bibliotech socket facilite le code 
