@@ -124,5 +124,43 @@ et que le serveur TCP n’est pas encore créé (server_socket = None).
 wifi_connected = False
 server_socket = None
 ```
+Cette fonction connect_wifi() active et connecte l’ESP32 au réseau Wi-Fi avec le SSID et mot de passe donnés,
+attend jusqu’à 10 secondes pour la connexion, puis retourne l’objet WLAN si connecté,
+sinon affiche un message d’échec.
+```
+def connect_wifi():
+    global wifi_connected
+    ssid = 'ESP_serveur'
+    password = '1234'
 
+    wlan = network.WLAN(network.STA_IF)
+    wlan.active(True)
+    wlan.connect(ssid, password)
 
+    timeout = 10  # 10 secondes max
+    for _ in range(timeout * 10):
+        if wlan.isconnected():
+            wifi_connected = True
+            print('WiFi connecté, IP :', wlan.ifconfig()[0])
+            return wlan
+        time.sleep(0.1)
+
+    print("Connexion WiFi échouée")
+    return None
+```
+La fonction setup_tcp_server() crée un serveur TCP sur le port 1234
+prêt à accepter des connexions entrantes, et le configure en mode non bloquant 
+en cas d’erreur, elle l’affiche.
+```
+def setup_tcp_server():
+    global server_socket
+    try:
+        addr = socket.getaddrinfo('0.0.0.0', 1234)[0][-1]
+        server_socket = socket.socket()
+        server_socket.bind(addr)
+        server_socket.listen(1)
+        server_socket.setblocking(False)
+        print("Serveur TCP démarré sur port 1234")
+    except Exception as e:
+        print("Erreur démarrage serveur TCP :", e)
+```
