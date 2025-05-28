@@ -8,15 +8,22 @@ Installer un interperteur phyton sur l'ESP32-S3, voici la marche à suivre :
 - appuyer sur le bouton boot et le maintenir tout en branchant sur le pc ce qui va faire apparaitre un nouveau numero de COM dans mon cas le COM9 (voir capture d'écrant).
 - puis cliquer sur installer ou mettre jour MicroPython (voir capture d'écrant).
 - sur le nouvelle onglet il faut selection le même port COM, cocher la case pour ecraser le progamme une fois flashé et enfin selectionner le type d'appereil et la dernière version (voir capture d'écrant).
-### Mise jour pour interpreteur Ardiuno
-- Installer VS Code
-- Insaller le plug-in PlatformIO sur le site : https://platformio.org/
-- Ouvrir les paramètre et crée un nouveau projet
-- Selectioner le bon modèle la configuration des port ce fait automatiquement 
 
 ![Capture d’écran 2025-05-27 120221](https://github.com/user-attachments/assets/f3a2b64d-13ea-4ee8-8441-b734bda6d39d)
 
 Toutes ces étapes nous ont permis de pouvoir flasher notre programme (l'envoyer à notre ESP) une fois celuit-ci écrit. Nous pouvons enfin crée un fichier main.py et commencer à coder.
+### Mise jour pour interpreteur Ardiuno
+- Installer VS Code
+- Insaller le plug-in PlatformIO sur le site : https://platformio.org/
+- Ouvrir les paramètre et crée un nouveau projet
+- Selectioner le bon modèle la configuration des port ce fait automatiquement
+
+Pour flasher le programme en Ardiuno il faut
+- Il faut maintenir le boutton boot
+- appuyer une fois sur reset
+- en continuant de maintenir le bouton boot
+- il faut build le programme
+  
 ### Explication et stratégie du code 
 #### mise en route et verification d'un programme flashé
 
@@ -307,4 +314,49 @@ const uint16_t port = 1234;
  
 const int buttonPin = 0;
 bool lastButtonState = HIGH;
+```
+Crée un objet client qui représente une connexion TCP au serveur WiFi.
+`WiFiClient client;`
+initialise la connexion série, configure un bouton
+lance la connexion WiFi en mode client, et attend jusqu’à être connecté
+tout en affichant l’état dans la console série.
+```
+void setup() {
+  Serial.begin(115200);
+  pinMode(buttonPin, INPUT_PULLUP);
+ 
+  WiFi.mode(WIFI_STA);
+  WiFi.begin(ssid, password);
+ 
+  Serial.print("Connexion au WiFi...");
+  while (WiFi.status() != WL_CONNECTED) {
+    delay(500);
+    Serial.print(".");
+  }
+  Serial.println(" connecté!");
+}
+```
+détecte précisément un appui sur le bouton
+Envoie une requête "CHANGE" au serveur pour changer la couleur
+Evite les rebonds, et mémorise l’état du bouton pour la prochaine lecture.
+```
+void loop() {
+  bool currentButtonState = digitalRead(buttonPin);
+ 
+  if (lastButtonState == HIGH && currentButtonState == LOW) {
+    Serial.println("Bouton pressé, envoi demande changement couleur");
+ 
+    if (client.connect(host, port)) {
+      client.print("CHANGE");
+      client.stop();
+      Serial.println("Message envoyé.");
+    } else {
+      Serial.println("Erreur connexion au serveur.");
+    }
+    delay(300);  // debounce
+  }
+ 
+  lastButtonState = currentButtonState;
+  delay(10);
+}
 ```
