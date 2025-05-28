@@ -11,7 +11,7 @@ Installer un interperteur phyton sur l'ESP32-S3, voici la marche à suivre :
 
 ![Capture d’écran 2025-05-27 120221](https://github.com/user-attachments/assets/f3a2b64d-13ea-4ee8-8441-b734bda6d39d)
 
-Tout ces étape nous ont permis de pouvoir flashé notre programme (l'envoyer à notre ESP) une fois celuit-ci écrit. Nous pouvons enfin crée un fichier main.py et commencer à coder.
+Toutes ces étapes nous ont permis de pouvoir flasher notre programme (l'envoyer à notre ESP) une fois celuit-ci écrit. Nous pouvons enfin crée un fichier main.py et commencer à coder.
 ### Explication et stratégie du code en phyton
 #### mise en route et verification d'un programme flashé
 
