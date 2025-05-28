@@ -74,7 +74,34 @@ neo[0] = colors[color_index]
 neo.write()
 
 ```
+Configuration du bouton boot :
+"button = Pin(0, Pin.IN, Pin.PULL_UP)" : Définit la broche GPIO0 (le bouton BOOT) en mode entrée avec une résistance pull-up.
+et Le bouton lira 1 quand il n’est pas appuyé et 0 quand il est appuyé.
+"neo[0] = colors[color_index]" : Met la LED à la première couleur de la liste (ici rouge au début).
+"neo.write()" : Envoie les données à la LED pour allumer la bonne couleur.
 
+Explication de la boucle :
+"while True:" Démarre une boucle infinie (le code à l'intérieur tourne en continu)
+"if button.value() == 0:" Vérifie si le bouton est appuyé (valeur 0).
+"color_index = (color_index + 1) % len(colors) Passe à la couleur suivante dans la liste.
+Le % (modulo) permet de revenir au début après la dernière couleur (rouge → vert → bleu → rouge...).
+"neo[0] = colors[color_index]" : Change la couleur affichée sur la LED.
+"neo.write()" : Met à jour la LED avec la nouvelle couleur.
+"print("Couleur actuelle :", colors[color_index])" : Affiche dans la console la couleur actuellement utilisée. pour verification
 
+Anti rebond :
+"while button.value() == 0:
+  time.sleep(0.01)" : Attend que le bouton soit relâché avant de continuer (évite les doubles appuis).
+  
+"time.sleep(0.2)" : Petite pause pour éviter que l'appui soit détecté plusieurs fois (anti-rebond).
+
+## Comunication entre deux ESP
+Pour cette partie, nous allons faire en sorte lorsque les deux ESP (phyton et arduino) communique entre eux une fois cela fait le boutton boot devrais changer la couleur de la LED de l'autre appareil.
+Si il ne communique pas alors le boot change la couleur de son propre ESP.
+### Moyen de communication 
+comme expliquer sur ce lien internet : https://esp32io.com/tutorials/communication-between-two-esp32
+notre appareil dispose de plusieur moyen de communication, tout depend de la distance entre nos deux ESP
+
+![Capture d’écran 2025-05-28 141305](https://github.com/user-attachments/assets/ed1bbcf5-beb5-43a7-a47d-bde39f2a79bb)
 
 
