@@ -126,10 +126,8 @@ définissent le bouton boot sur GPIO0
 et initialisent la couleur à éteinte ainsi qu’un compteur pour changer la couleur
 
 Adafruit_NeoPixel est une classe de Adafruit NeoPixel C++ library.
-NEO_GRBW
-Indique à la bibliothèque comment interpréter les données de couleur : G (vert), R (rouge), B (bleu), W (blanc) ordre.
-NEO_KHZ800
-Indique à la bibliothèque la fréquence du signal de données requise pour la DEL
+NEO_GRBW -> Indique à la bibliothèque comment interpréter les données de couleur : G (vert), R (rouge), B (bleu), W (blanc) ordre.
+NEO_KHZ800 ->  Indique à la bibliothèque la fréquence du signal de données requise pour la DEL
 ```
 Adafruit_NeoPixel LED_RGB(1,48,NEO_GRBW + NEO_KHZ800);
 const int BOOT_BUTTON = 0;  // GPIO0 is the boot button
@@ -151,9 +149,9 @@ fonction main
 Lecture du bouton boot
 interation pour changement de couleur avec reset pour revenir à la couleur de base.
 
-"Serial" Objet série d’Arduino.h qui communique sur USB.
+Serial ->  Objet série d’Arduino.h qui communique sur USB.
 
-.println()   imprime les données.
+.println() -> imprime les données.
 
 buttonState dit la valeur logique de notre sortie.
 ```
@@ -206,8 +204,12 @@ selection de la couleur en fonction de l'incrementation fait précedement
       break;
   }
 ```
-Application des variables pour afficher la couleur
-avec un délais pour la lecture rapide
+Application des variables pour afficher la couleur.
+
+LED_RGB -> Adafruit_NeoPixel object
+.Color(r, g, b) -> Combines RGB values into a single 32-bit color value
+setPixelColor(0, uint32_t) -> le 0 met la première LED à la couleur que l'on choisit
+avec un délais pour la lecture rapide.
 ```
   // Set the LED color
   LED_RGB.setPixelColor(0, uint32_t(LED_RGB.Color(rgbColor[0], rgbColor[1], rgbColor[2])));
