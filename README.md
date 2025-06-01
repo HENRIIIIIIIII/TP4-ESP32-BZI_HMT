@@ -15,8 +15,11 @@ Toutes ces étapes nous ont permis de pouvoir flasher notre programme (l'envoyer
 ### Mise jour pour interpreteur Ardiuno
 - Installer VS Code
 - Insaller le plug-in PlatformIO sur le site : https://platformio.org/
-- ![image](https://github.com/user-attachments/assets/e6e3d23e-6a86-4681-b69d-c1c3ffa13240)
+  ![image](https://github.com/user-attachments/assets/e6e3d23e-6a86-4681-b69d-c1c3ffa13240)
 - Ouvrir les paramètre et crée un nouveau projet
+  
+  ![image](https://github.com/user-attachments/assets/9869d852-a400-44c3-beb0-801786d70991)
+
 - Selectioner le bon modèle la configuration des port ce fait automatiquement
 
 Pour flasher le programme en Ardiuno il faut
@@ -121,6 +124,12 @@ librairie pour le fonctionemment de la LED RGB
 Préparation du contrôle d’une LED NeoPixel sur GPIO48
 définissent le bouton boot sur GPIO0
 et initialisent la couleur à éteinte ainsi qu’un compteur pour changer la couleur
+
+Adafruit_NeoPixel est une classe de Adafruit NeoPixel C++ library.
+NEO_GRBW
+Indique à la bibliothèque comment interpréter les données de couleur : G (vert), R (rouge), B (bleu), W (blanc) ordre.
+NEO_KHZ800
+Indique à la bibliothèque la fréquence du signal de données requise pour la DEL
 ```
 Adafruit_NeoPixel LED_RGB(1,48,NEO_GRBW + NEO_KHZ800);
 const int BOOT_BUTTON = 0;  // GPIO0 is the boot button
@@ -140,8 +149,13 @@ void setup()
 ```
 fonction main 
 Lecture du bouton boot
-interation pour changement de couleur avec reset pour revenir à la couleur de base
+interation pour changement de couleur avec reset pour revenir à la couleur de base.
 
+"Serial" Objet série d’Arduino.h qui communique sur USB.
+
+.println()   imprime les données.
+
+buttonState dit la valeur logique de notre sortie.
 ```
 void loop()
 {
