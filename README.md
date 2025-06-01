@@ -15,6 +15,7 @@ Toutes ces étapes nous ont permis de pouvoir flasher notre programme (l'envoyer
 ### Mise jour pour interpreteur Ardiuno
 - Installer VS Code
 - Insaller le plug-in PlatformIO sur le site : https://platformio.org/
+- ![image](https://github.com/user-attachments/assets/e6e3d23e-6a86-4681-b69d-c1c3ffa13240)
 - Ouvrir les paramètre et crée un nouveau projet
 - Selectioner le bon modèle la configuration des port ce fait automatiquement
 
