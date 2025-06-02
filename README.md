@@ -90,6 +90,7 @@ neo[0] = colors[color_index]
 neo.write()
 
 ```
+
 Configuration du bouton boot :
 "button = Pin(0, Pin.IN, Pin.PULL_UP)" : Définit la broche GPIO0 (le bouton BOOT) en mode entrée avec une résistance pull-up.
 et Le bouton lira 1 quand il n’est pas appuyé et 0 quand il est appuyé.
