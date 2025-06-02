@@ -1,5 +1,5 @@
 # TP4-ESP32-BZI_HMT
-## ESP32 Partie python
+## ESP32 Mise en route
 ### Mise à jour des firmeward et installation d'un interperteur phyton
 Pour programmer en phyton nous devons utiliser IDE Thonny (comme conseillé dans la donnée), avant même de commencer a tapé du code il faut.
 Installer un interperteur phyton sur l'ESP32-S3, voici la marche à suivre :
@@ -15,18 +15,20 @@ Toutes ces étapes nous ont permis de pouvoir flasher notre programme (l'envoyer
 ### Mise jour pour interpreteur Ardiuno
 - Installer VS Code
 - Insaller le plug-in PlatformIO sur le site : https://platformio.org/
+- 
   ![image](https://github.com/user-attachments/assets/e6e3d23e-6a86-4681-b69d-c1c3ffa13240)
-- Ouvrir les paramètre et crée un nouveau projet
+  
+- Ouvrir les paramètre et crée un nouveau projet 
   
   ![image](https://github.com/user-attachments/assets/9869d852-a400-44c3-beb0-801786d70991)
 
-- Selectioner le bon modèle la configuration des port ce fait automatiquement
+- Selectioner le bon modèle la configuration des port ce fait automatiquement 
 
 Pour flasher le programme en Ardiuno il faut
 - Il faut maintenir le boutton boot
 - appuyer une fois sur reset
 - en continuant de maintenir le bouton boot
-- il faut build le programme
+- il faut build le programme (compiler et 
   
 ### Explication et stratégie du code 
 #### mise en route et verification d'un programme flashé
@@ -54,13 +56,8 @@ Nous recuperons aussi la réference de la LED ce qui nous permet d'aller à son 
 
 Nous comprenons donc qu'une trame de 24 bits est communiqué et que chaque couleur et séparer en 8 partie chaque LED (R/G/B) recupére les information lié à ça couleur.
 
-### Changement de la couleur d'une LED RGB en appuyant sur le boutton boot phyton
-Librairie : 
-
-"from machine import Pin" : importe la classe "Pin" qui nous permet de controler les broche GPIO de l'esp32.
-"from neopixel import NeoPixel" : importe la classe "NeoPixel" pour contoler les LED RGB comme celle de type WS2812.
-"import time" : Importe le module time pour pouvoir faire des pauses (sleep) dans le programme.
-
+## Changement de la couleur d'une LED RGB en appuyant sur le boutton boot phyton
+Importation de librairi pour les pin, la led et le temps
 ```
 from machine import Pin
 from neopixel import NeoPixel
@@ -112,7 +109,7 @@ Anti rebond :
   
 "time.sleep(0.2)" : Petite pause pour éviter que l'appui soit détecté plusieurs fois (anti-rebond).
 
-### Changement de la couleur d'une LED RGB en appuyant sur le boutton boot Arduino
+## Changement de la couleur d'une LED RGB en appuyant sur le boutton boot Arduino
 Nous avons choisi de séparer la partie du code qui permet de changer la couleur de son propre ESP
 et l'autre code permetant de changer la couleur de l'autre ESP (voir plus bas)
 
@@ -122,13 +119,13 @@ librairie pour le fonctionemment de la LED RGB
 #include <Arduino.h>
 #include <Adafruit_NeoPixel.h>  //lib for LED_RGB fonction
 ```
-Préparation du contrôle d’une LED NeoPixel sur GPIO48
-définissent le bouton boot sur GPIO0
-et initialisent la couleur à éteinte ainsi qu’un compteur pour changer la couleur
+Préparation et contrôle d’une LED NeoPixel sur GPIO48, 
+définition du bouton boot sur GPIO0.
+Initialisent le tableau de couleur à émettre ainsi qu’un compteur pour changer la couleur.
 
 Adafruit_NeoPixel est une classe de Adafruit NeoPixel C++ library.
-NEO_GRBW -> Indique à la bibliothèque comment interpréter les données de couleur : G (vert), R (rouge), B (bleu), W (blanc) ordre.
-NEO_KHZ800 ->  Indique à la bibliothèque la fréquence du signal de données requise pour la DEL
+NEO_GRBW -> Indique à la bibliothèque comment interpréter les données de couleur : G (vert), R (rouge), B (bleu).
+NEO_KHZ800 ->  Indique à la bibliothèque la fréquence du signal de données requise pour la LED
 ```
 Adafruit_NeoPixel LED_RGB(1,48,NEO_GRBW + NEO_KHZ800);
 const int BOOT_BUTTON = 0;  // GPIO0 is the boot button
@@ -148,13 +145,11 @@ void setup()
 ```
 fonction main 
 Lecture du bouton boot
-interation pour changement de couleur avec reset pour revenir à la couleur de base.
+interation pour changement de couleur avec reset pour revenir à la couleur de base (rouge).
 
-Serial ->  Objet série d’Arduino.h qui communique sur USB.
+Serial.println() ->  affiche l'etat du bouton sur terminal.
 
-.println() -> imprime les données.
-
-buttonState dit la valeur logique de notre sortie.
+buttonState : état bouton.
 ```
 void loop()
 {
@@ -178,7 +173,8 @@ void loop()
    
   }
 ```
-selection de la couleur en fonction de l'incrementation fait précedement
+Selection de la couleur en fonction de l'incrementation fait précedement
+Chaque case correspond à une couleur.
 ``` 
   // Toggle RGB based on counter
   switch (counter)
@@ -207,10 +203,11 @@ selection de la couleur en fonction de l'incrementation fait précedement
 ```
 Application des variables pour afficher la couleur.
 
-LED_RGB -> Adafruit_NeoPixel object
-.Color(r, g, b) -> Combines RGB values into a single 32-bit color value
-setPixelColor(0, uint32_t) -> le 0 met la première LED à la couleur que l'on choisit
-avec un délais pour la lecture rapide.
+LED_RGB -> Adafruit_NeoPixel est un objet
+.Color(r, g, b) -> regroupe toutes les données dans la variable color (32 bit)
+setPixelColor(0, uint32_t) -> le 0 met la première LED à la couleur que l'on choisit.
+
+on ajoute un délais pour une meilleur lecture du bouton
 ```
   // Set the LED color
   LED_RGB.setPixelColor(0, uint32_t(LED_RGB.Color(rgbColor[0], rgbColor[1], rgbColor[2])));
@@ -219,26 +216,33 @@ avec un délais pour la lecture rapide.
   delay(100);  // Small delay to prevent too rapid reading
 ```
 ## Comunication entre deux ESP
-Pour cette partie, nous allons faire en sorte lorsque les deux ESP (phyton et en C) communique entre eux une fois cela fait le boutton boot devrais changer la couleur de la LED de l'autre appareil.
-Si il ne communique pas alors le boot change la couleur de son propre ESP.
+Pour cette partie, nous allons faire en sorte lorsque les deux ESP (phyton et en arduino) communique entre eux une fois cela fait le boutton boot devrais changer la couleur de la LED de l'autre appareil.
 ### Moyen de communication 
 comme expliquer sur ce lien internet : https://esp32io.com/tutorials/communication-between-two-esp32
-notre appareil dispose de plusieur moyen de communication, tout depend de la distance entre nos deux ESP
+notre appareil dispose de plusieur moyen de communication, tout depend de la distance entre nos deux ESP.
 
 ![Capture d’écran 2025-05-28 141305](https://github.com/user-attachments/assets/ed1bbcf5-beb5-43a7-a47d-bde39f2a79bb)
-### Communication en wifi TCP SERVER phyton
-Nous allons donc utiliser la communication en wifi comme dans le tutoriel.
-Vue que nous allons connecter les deux ESP en mode LAN donc un des deux va servir de routeur (TCP client/TCP server), nous n'avons pas besoin de se connecter à internet.
-Nous avons choisit d'utiliser l'ESP phyton en tant que TCP server car la bibliotech socket facilite le code 
-Et l'ESP en C servira de TCP client.
 
-Voici les explication des differents fonction pour cette partie :
+Nous allons donc utiliser la communication en wifi comme dans le tutoriel.
+Vue que nous allons connecter les deux ESP en mode LAN (résaux local) donc un des deux va servir de routeur (TCP client/TCP server), nous n'avons pas besoin de se connecter à internet.
+Nous avons choisit d'utiliser l'ESP phyton en tant que TCP server car la bibliotech socket facilite le code 
+Et l'ESP en Arduino servira de TCP client donc c'est lui qui va envoyer la commande pour changer les couleurs.
+
+## Communication en wifi TCP SERVER phyton
+
 
 network permet de connecter l’ESP32 au Wi-Fi
 socket sert à envoyer/recevoir des données sur ce réseau.
 ```
 import socket
 import network
+```
+Pour le clignotement de la couleur 
+```
+# État pour le clignotement
+led_on = True
+last_blink = time.ticks_ms()
+
 ```
 Configuration du point d'accès wifi :
 ap est un objet qui représente le point d’accès WiFi 
@@ -279,19 +283,33 @@ def change_color():
     neo.write()
     print("Couleur changée:", colors[color_index])
 ```
-Détecte un appui sur le bouton et ne change la couleur qu’une fois par appui, même si tu maintiens le bouton enfoncé.
-Il attend que tu relâches le bouton avant d’accepter un nouvel appui, et ajoute un petit délai pour éviter les faux déclenchements liés au bruit mécanique du bouton.
+Gestion du clignotement de la LED tout les 0.5 seconde.
+Détecte un appui sur le bouton et ne change la couleur qu’une fois par appui, même si on maintiens le bouton enfoncé.
+Le programme attend qu'on relâches le bouton avant d’accepter un nouvel appui, et ajoute un petit délai pour éviter les faux déclenchements liés au bruit mécanique du bouton.
 
 ```
+# --- Boucle principale ---
 while True:
-    # Bouton local
+    now = time.ticks_ms()
+
+    # Clignotement toutes les 0.5 secondes
+    if time.ticks_diff(now, last_blink) >= 500:
+        led_on = not led_on
+        if led_on:
+            neo[0] = colors[color_index]
+        else:
+            neo[0] = (0, 0, 0)  # Éteint la LED
+        neo.write()
+        last_blink = now
+
+    # Gestion du bouton local
     if button.value() == 0:
         change_color()
         while button.value() == 0:
-            time.sleep(0.01)
-        time.sleep(0.2)
+            time.sleep(0.01)  # Antirebond
+        time.sleep(0.2)  # Petite pause après appui
 ```
-Ce code vérifie si un client se connecte au serveur.
+Vérifie si un client se connecte au serveur.
 S’il reçoit le message "CHANGE", il change la couleur de la LED.
 Ensuite, il ferme la connexion.
 S’il n’y a pas de client, il continue sans bloquer.
@@ -314,9 +332,11 @@ except OSError:
 
 time.sleep(0.01)
 ```
-### Communication en wifi TCP Client Arduino
+
+## Communication en wifi TCP Client Arduino
 L'ESP codé en Arduino sera le client c'est donc lui qui va provoquer le changement de couleur
-sur l'autre ESP server en appuyant sur le boutton boot
+sur l'autre ESP server en appuyant sur le boutton boot :
+
 cette librairie nous permet de paramétrer la connection au wifi
 `#include <WiFi.h>`
 Initialisation des coordonée pour la connexion au ESP server
@@ -335,9 +355,9 @@ bool lastButtonState = HIGH;
 ```
 Crée un objet client qui représente une connexion TCP au serveur WiFi.
 `WiFiClient client;`
-initialise la connexion série, configure un bouton
-lance la connexion WiFi en mode client, et attend jusqu’à être connecté
-tout en affichant l’état dans la console série.
+initialise la connexion série, configure un bouton.
+Lance la connexion WiFi en mode client, et attend jusqu’à être connecté
+tout en affichant l’état dans le terminal.
 ```
 void setup() {
   Serial.begin(115200);
@@ -355,7 +375,7 @@ void setup() {
 }
 ```
 détecte précisément un appui sur le bouton
-Envoie une requête "CHANGE" au serveur pour changer la couleur
+Envoie une requête "CHANGE" au serveur pour changer la couleur sur l'autre ESP32
 Evite les rebonds, et mémorise l’état du bouton pour la prochaine lecture.
 ```
 void loop() {
