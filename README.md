@@ -20,7 +20,7 @@ Toutes ces étapes nous ont permis de pouvoir flasher notre programme (l'envoyer
   
 - Ouvrir les paramètre et crée un nouveau projet 
   
-  ![image](https://github.com/user-attachments/assets/9869d852-a400-44c3-beb0-801786d70991)
+  ![image](https://github.com/user-attachments/assets/c70aef62-2fac-44b0-94f6-cf572a731679)
 
 - Selectioner le bon modèle la configuration des port ce fait automatiquement 
 
